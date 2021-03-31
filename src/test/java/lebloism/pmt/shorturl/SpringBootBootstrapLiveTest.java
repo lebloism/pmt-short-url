@@ -51,6 +51,23 @@ public class SpringBootBootstrapLiveTest {
     }
 
     @Test
+    public void whenGetDestination_thenOK() {
+        ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
+
+        Response creationResponse = RestAssured.given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(dto)
+                .post(API_ROOT);
+        String shortUrl = creationResponse.jsonPath().get("shortUrl");
+
+
+        Response destinationResponse = RestAssured.get(API_ROOT+"/destination/"+shortUrl);
+
+        assertEquals(HttpStatus.OK.value(), destinationResponse.getStatusCode());
+        assertEquals(dto.getLongUrl(), destinationResponse.getBody().print());
+    }
+
+    @Test
     public void whenGetNotExistShortUrlById_thenNotFound() {
         Response response = RestAssured.get(API_ROOT + "/" + 654654654);
 

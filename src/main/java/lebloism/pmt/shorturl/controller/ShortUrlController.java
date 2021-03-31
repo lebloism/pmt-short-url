@@ -30,10 +30,16 @@ public class ShortUrlController {
                 .orElseThrow(ShortUrlNotFoundException::new);
     }
 
+    @GetMapping("/destination/{shortUrl}")
+    public String getDestination(@PathVariable String shortUrl) {
+        return shortUrlRepository.findByShortUrl(shortUrl)
+                .orElseThrow(ShortUrlNotFoundException::new).getLongUrl();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ShortUrl create(@RequestBody ShortUrlCreationDto dto) {
-        String shortUrlString = randomAlphabetic(8);
+        String shortUrlString = randomAlphabetic(8).toUpperCase();
         ShortUrl shortUrl = new ShortUrl(shortUrlString, dto.getLongUrl());
         return shortUrlRepository.save(shortUrl);
     }
@@ -50,10 +56,10 @@ public class ShortUrlController {
 
         ShortUrl shortUrl = shortUrlRepository.findById(id)
                 .orElseThrow(ShortUrlNotFoundException::new);
-        if (dto.getShortUrl()!=null){
+        if (dto.getShortUrl() != null) {
             shortUrl.setShortUrl(dto.getShortUrl());
         }
-        if (dto.getLongUrl()!=null){
+        if (dto.getLongUrl() != null) {
             shortUrl.setLongUrl(dto.getLongUrl());
         }
         return shortUrlRepository.save(shortUrl);
