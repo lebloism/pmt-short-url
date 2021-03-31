@@ -5,6 +5,14 @@ import javax.persistence.*;
 @Entity
 public class ShortUrl {
 
+    public ShortUrl(){
+
+    }
+    public ShortUrl(String shortUrl, String longUrl) {
+        this.shortUrl = shortUrl;
+        this.longUrl = longUrl;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

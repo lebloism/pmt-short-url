@@ -2,7 +2,8 @@ package lebloism.pmt.shorturl;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import lebloism.pmt.shorturl.model.ShortUrl;
+import lebloism.pmt.shorturl.dto.ShortUrlCreationDto;
+import lebloism.pmt.shorturl.dto.ShortUrlUpdateDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.http.MediaType;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class SpringBootBootstrapLiveTest {
@@ -18,17 +18,16 @@ public class SpringBootBootstrapLiveTest {
     private static final String API_ROOT
             = "http://localhost:8081/short_url";
 
-    private ShortUrl createRandomShortUrl() {
-        ShortUrl shortUrl = new ShortUrl();
-        shortUrl.setShortUrl(randomAlphabetic(10));
-        shortUrl.setLongUrl(randomAlphabetic(15));
-        return shortUrl;
+    private ShortUrlCreationDto createRandomShortUrlCreationDto() {
+        ShortUrlCreationDto dto = new ShortUrlCreationDto();
+        dto.setLongUrl(randomAlphabetic(15));
+        return dto;
     }
 
-    private String createShortUrlAsUri(ShortUrl shortUrl) {
-       Response response = RestAssured.given()
+    private String createShortUrlAsUri(ShortUrlCreationDto dto) {
+        Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(shortUrl)
+                .body(dto)
                 .post(API_ROOT);
         return API_ROOT + "/" + response.jsonPath().get("id");
     }
@@ -42,13 +41,13 @@ public class SpringBootBootstrapLiveTest {
 
     @Test
     public void whenGetCreatedShortUrlById_thenOK() {
-        ShortUrl shortUrl = createRandomShortUrl();
-        String location = createShortUrlAsUri(shortUrl);
+        ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
+        String location = createShortUrlAsUri(dto);
         Response response = RestAssured.get(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-        assertEquals(shortUrl.getShortUrl(), response.jsonPath()
-                .get("shortUrl"));
+        assertEquals(dto.getLongUrl(), response.jsonPath()
+                .get("longUrl"));
     }
 
     @Test
@@ -60,10 +59,10 @@ public class SpringBootBootstrapLiveTest {
 
     @Test
     public void whenCreateNewShortUrl_thenCreated() {
-        ShortUrl shortUrl = createRandomShortUrl();
+        ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(shortUrl)
+                .body(dto)
                 .post(API_ROOT);
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
@@ -71,11 +70,11 @@ public class SpringBootBootstrapLiveTest {
 
     @Test
     public void whenInvalidShortUrl_thenError() {
-        ShortUrl shortUrl = createRandomShortUrl();
-        shortUrl.setLongUrl(null);
+        ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
+        dto.setLongUrl(null);
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(shortUrl)
+                .body(dto)
                 .post(API_ROOT);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
@@ -83,13 +82,13 @@ public class SpringBootBootstrapLiveTest {
 
     @Test
     public void whenUpdateCreatedShortUrl_thenUpdated() {
-        ShortUrl shortUrl = createRandomShortUrl();
-        String location = createShortUrlAsUri(shortUrl);
-        shortUrl.setId(Long.parseLong(location.split("short_url/")[1]));
-        shortUrl.setLongUrl("newLongUrl");
+        ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
+        String location = createShortUrlAsUri(dto);
+        ShortUrlUpdateDto updateDto = new ShortUrlUpdateDto();
+        updateDto.setLongUrl("newLongUrl");
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(shortUrl)
+                .body(updateDto)
                 .put(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
@@ -103,8 +102,8 @@ public class SpringBootBootstrapLiveTest {
 
     @Test
     public void whenDeleteCreatedShortUrl_thenOk() {
-        ShortUrl shortUrl = createRandomShortUrl();
-        String location = createShortUrlAsUri(shortUrl);
+        ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
+        String location = createShortUrlAsUri(dto);
         Response response = RestAssured.delete(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
