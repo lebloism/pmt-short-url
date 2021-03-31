@@ -1,7 +1,7 @@
 package lebloism.pmt.shorturl;
 
-import lebloism.pmt.shorturl.exception.BookIdMismatchException;
-import lebloism.pmt.shorturl.exception.BookNotFoundException;
+import lebloism.pmt.shorturl.exception.ShortUrlIdMismatchException;
+import lebloism.pmt.shorturl.exception.ShortUrlNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -19,13 +19,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         super();
     }
 
-    @ExceptionHandler(BookNotFoundException.class)
+    @ExceptionHandler(ShortUrlNotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request) {
-        return handleExceptionInternal(ex, "Book not found", new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(ex, "ShortUrl not found", new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler({
-            BookIdMismatchException.class,
+            ShortUrlIdMismatchException.class,
             ConstraintViolationException.class,
             DataIntegrityViolationException.class
     })

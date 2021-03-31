@@ -2,13 +2,11 @@ package lebloism.pmt.shorturl;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import lebloism.pmt.shorturl.model.Book;
+import lebloism.pmt.shorturl.model.ShortUrl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
-import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,91 +16,80 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SpringBootBootstrapLiveTest {
 
     private static final String API_ROOT
-            = "http://localhost:8081/api/books";
+            = "http://localhost:8081/short_url";
 
-    private Book createRandomBook() {
-        Book book = new Book();
-        book.setTitle(randomAlphabetic(10));
-        book.setAuthor(randomAlphabetic(15));
-        return book;
+    private ShortUrl createRandomShortUrl() {
+        ShortUrl shortUrl = new ShortUrl();
+        shortUrl.setShortUrl(randomAlphabetic(10));
+        shortUrl.setLongUrl(randomAlphabetic(15));
+        return shortUrl;
     }
 
-    private String createBookAsUri(Book book) {
+    private String createShortUrlAsUri(ShortUrl shortUrl) {
        Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(book)
+                .body(shortUrl)
                 .post(API_ROOT);
         return API_ROOT + "/" + response.jsonPath().get("id");
     }
 
     @Test
-    public void whenGetAllBooks_thenOK() {
+    public void whenGetAllShortUrl_thenOK() {
         Response response = RestAssured.get(API_ROOT);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
     }
 
     @Test
-    public void whenGetBooksByTitle_thenOK() {
-        Book book = createRandomBook();
-        createBookAsUri(book);
-        Response response = RestAssured.get(
-                API_ROOT + "/title/" + book.getTitle());
-
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-        assertTrue(response.as(List.class)
-                .size() > 0);
-    }
-    @Test
-    public void whenGetCreatedBookById_thenOK() {
-        Book book = createRandomBook();
-        String location = createBookAsUri(book);
+    public void whenGetCreatedShortUrlById_thenOK() {
+        ShortUrl shortUrl = createRandomShortUrl();
+        String location = createShortUrlAsUri(shortUrl);
         Response response = RestAssured.get(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-        assertEquals(book.getTitle(), response.jsonPath()
-                .get("title"));
+        assertEquals(shortUrl.getShortUrl(), response.jsonPath()
+                .get("shortUrl"));
     }
 
     @Test
-    public void whenGetNotExistBookById_thenNotFound() {
+    public void whenGetNotExistShortUrlById_thenNotFound() {
         Response response = RestAssured.get(API_ROOT + "/" + 654654654);
 
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
     }
 
     @Test
-    public void whenCreateNewBook_thenCreated() {
-        Book book = createRandomBook();
+    public void whenCreateNewShortUrl_thenCreated() {
+        ShortUrl shortUrl = createRandomShortUrl();
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(book)
+                .body(shortUrl)
                 .post(API_ROOT);
 
         assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
     }
 
     @Test
-    public void whenInvalidBook_thenError() {
-        Book book = createRandomBook();
-        book.setAuthor(null);
+    public void whenInvalidShortUrl_thenError() {
+        ShortUrl shortUrl = createRandomShortUrl();
+        shortUrl.setLongUrl(null);
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(book)
+                .body(shortUrl)
                 .post(API_ROOT);
 
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
     }
 
     @Test
-    public void whenUpdateCreatedBook_thenUpdated() {
-        Book book = createRandomBook();
-        String location = createBookAsUri(book);
-        book.setId(Long.parseLong(location.split("api/books/")[1]));
-        book.setAuthor("newAuthor");
+    public void whenUpdateCreatedShortUrl_thenUpdated() {
+        ShortUrl shortUrl = createRandomShortUrl();
+        String location = createShortUrlAsUri(shortUrl);
+        shortUrl.setId(Long.parseLong(location.split("short_url/")[1]));
+        shortUrl.setLongUrl("newLongUrl");
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(book)
+                .body(shortUrl)
                 .put(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
@@ -110,14 +97,14 @@ public class SpringBootBootstrapLiveTest {
         response = RestAssured.get(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-        assertEquals("newAuthor", response.jsonPath()
-                .get("author"));
+        assertEquals("newLongUrl", response.jsonPath()
+                .get("longUrl"));
     }
 
     @Test
-    public void whenDeleteCreatedBook_thenOk() {
-        Book book = createRandomBook();
-        String location = createBookAsUri(book);
+    public void whenDeleteCreatedShortUrl_thenOk() {
+        ShortUrl shortUrl = createRandomShortUrl();
+        String location = createShortUrlAsUri(shortUrl);
         Response response = RestAssured.delete(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());

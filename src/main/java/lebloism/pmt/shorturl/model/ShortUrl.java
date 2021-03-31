@@ -3,17 +3,17 @@ package lebloism.pmt.shorturl.model;
 import javax.persistence.*;
 
 @Entity
-public class Book {
+public class ShortUrl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Column(nullable = false, unique = true)
-    private String title;
+    private String shortUrl;
 
     @Column(nullable = false)
-    private String author;
+    private String longUrl;
 
     public long getId() {
         return id;
@@ -23,29 +23,29 @@ public class Book {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getShortUrl() {
+        return shortUrl;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setShortUrl(String shortUrl) {
+        this.shortUrl = shortUrl;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getLongUrl() {
+        return longUrl;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setLongUrl(String longUrl) {
+        this.longUrl = longUrl;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((author == null) ? 0 : author.hashCode());
+        result = prime * result + ((longUrl == null) ? 0 : longUrl.hashCode());
         result = prime * result + (int) (id ^ (id >>> 32));
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((shortUrl == null) ? 0 : shortUrl.hashCode());
         return result;
     }
 
@@ -57,25 +57,25 @@ public class Book {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Book other = (Book) obj;
-        if (author == null) {
-            if (other.author != null)
+        ShortUrl other = (ShortUrl) obj;
+        if (longUrl == null) {
+            if (other.longUrl != null)
                 return false;
-        } else if (!author.equals(other.author))
+        } else if (!longUrl.equals(other.longUrl))
             return false;
         if (id != other.id)
             return false;
-        if (title == null) {
-            if (other.title != null)
+        if (shortUrl == null) {
+            if (other.shortUrl != null)
                 return false;
-        } else if (!title.equals(other.title))
+        } else if (!shortUrl.equals(other.shortUrl))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Book [id=" + id + ", title=" + title + ", author=" + author + "]";
+        return "ShortUrl [id=" + id + ", shortUrl=" + shortUrl + ", longUrl=" + longUrl + "]";
     }
 
 }
