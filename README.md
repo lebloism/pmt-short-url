@@ -40,5 +40,8 @@ We could add :
     * not using confusing characters as O/0, I/l
     * easy-to-memorize (alternation of consonants and vowels)
 * metrics
+* a better error handling (with nice error messages)
+* a documentation with Swagger
+* unit tests (especially if different generation strategies) - integration tests were a way to go quickier, but for maintenance, unit tests would be more appropriate
 
 Of course, this short url provider would be useful only if hosted on a very short domain name !!
