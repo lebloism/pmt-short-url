@@ -102,7 +102,7 @@ public class SpringBootBootstrapLiveTest {
         ShortUrlCreationDto dto = createRandomShortUrlCreationDto();
         String location = createShortUrlAsUri(dto);
         ShortUrlUpdateDto updateDto = new ShortUrlUpdateDto();
-        updateDto.setLongUrl("newLongUrl");
+        updateDto.setLongUrl("https://newLongUrl.fr");
         Response response = RestAssured.given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(updateDto)
@@ -113,7 +113,7 @@ public class SpringBootBootstrapLiveTest {
         response = RestAssured.get(location);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-        assertEquals("newLongUrl", response.jsonPath()
+        assertEquals("https://newLongUrl.fr", response.jsonPath()
                 .get("longUrl"));
     }
 

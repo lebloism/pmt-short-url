@@ -55,8 +55,15 @@ public class ShortUrlController {
         shortUrlRepository.deleteById(id);
     }
 
+    /**
+     * Update a ShortUrl object. The fields are modified only if provided.
+     * @param id the id of the ShortUrl object
+     * @param dto json containing the fields "longUrl" and/or "shortUrl"
+     * @throws ShortUrlNotFoundException if not found
+     * @throws MalformedURLException if longUrl is not a valid URL
+     */
     @PutMapping("/{id}")
-    public ShortUrl updateShortUrl(@RequestBody ShortUrlUpdateDto dto, @PathVariable Long id) {
+    public ShortUrl updateShortUrl(@RequestBody ShortUrlUpdateDto dto, @PathVariable Long id) throws MalformedURLException {
 
         ShortUrl shortUrl = shortUrlRepository.findById(id)
                 .orElseThrow(ShortUrlNotFoundException::new);
@@ -64,7 +71,8 @@ public class ShortUrlController {
             shortUrl.setShortUrl(dto.getShortUrl());
         }
         if (dto.getLongUrl() != null) {
-            shortUrl.setLongUrl(dto.getLongUrl());
+            URL longUrl = new URL(dto.getLongUrl());
+            shortUrl.setLongUrl(longUrl.toExternalForm());
         }
         return shortUrlRepository.save(shortUrl);
     }
