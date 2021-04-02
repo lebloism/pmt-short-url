@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "37c55a04-c41e-413f-bcb9-2063675b7ad7",
+		"name": "PMT short url provider",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get all shorturls",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/short_url",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"short_url"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get shorturl",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/short_url/2",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"short_url",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "follow shorturl",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/IYKOEEQM",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"IYKOEEQM"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create shorturl",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"longUrl\" : \"https://www.google.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/short_url",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"short_url"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get destination",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/short_url/destination/RZHQXZJK",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"short_url",
+						"destination",
+						"RZHQXZJK"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update shorturl",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"longUrl\" : \"https://paymytable.com/\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/short_url/1",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"short_url",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete shorturl",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"longUrl\" : \"https://paymytable.com/\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://pmt-shorturl-marie.nw.r.appspot.com/short_url/1",
+					"protocol": "https",
+					"host": [
+						"pmt-shorturl-marie",
+						"nw",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"short_url",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

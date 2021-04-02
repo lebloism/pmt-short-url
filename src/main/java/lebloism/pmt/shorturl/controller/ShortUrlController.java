@@ -8,13 +8,15 @@ import lebloism.pmt.shorturl.model.ShortUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
+/**
+ * To manage ShortUrl objects
+ */
 @RestController
 @RequestMapping("/short_url")
 public class ShortUrlController {
@@ -22,32 +24,59 @@ public class ShortUrlController {
     @Autowired
     private ShortUrlRepository shortUrlRepository;
 
+    /**
+     * Retrieve all ShortUrl objects
+     * @return array containing all existing ShortUrl objects
+     */
     @GetMapping
-    public Iterable findAll() {
+    public Iterable<ShortUrl> findAll() {
         return shortUrlRepository.findAll();
     }
 
+    /**
+     * Get a ShortUrl object by its id
+     * @param id the id of the ShortUrl object
+     * @return the ShortUrl object
+     * @throws ShortUrlNotFoundException if not found
+     */
     @GetMapping("/{id}")
     public ShortUrl findOne(@PathVariable Long id) {
         return shortUrlRepository.findById(id)
                 .orElseThrow(ShortUrlNotFoundException::new);
     }
 
+    /**
+     * Get the long url associated to a short url
+     * @param shortUrl the short url (string)
+     * @return the long url
+     * @throws ShortUrlNotFoundException if not found
+     */
     @GetMapping("/destination/{shortUrl}")
     public String getDestination(@PathVariable String shortUrl) {
         return shortUrlRepository.findByShortUrl(shortUrl)
                 .orElseThrow(ShortUrlNotFoundException::new).getLongUrl();
     }
 
+    /**
+     * Create a ShortUrl object for the provided long url
+     * @param dto json containing the field "longUrl"
+     * @return the ShortUrl object
+     * @throws MalformedURLException if longUrl is not a valid URL
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ShortUrl create(@RequestBody ShortUrlCreationDto dto) throws MalformedURLException {
-        URL longUrl  = new URL(dto.getLongUrl());
+        URL longUrl = new URL(dto.getLongUrl());
         String shortUrlString = randomAlphabetic(8).toUpperCase();
         ShortUrl shortUrl = new ShortUrl(shortUrlString, longUrl.toExternalForm());
         return shortUrlRepository.save(shortUrl);
     }
 
+    /**
+     * Delete a ShortUrl object
+     * @param id the id of the ShortUrl object
+     * @throws ShortUrlNotFoundException if not found
+     */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         shortUrlRepository.findById(id)

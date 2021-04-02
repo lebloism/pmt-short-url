@@ -13,14 +13,14 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class SpringBootBootstrapLiveTest {
+public class IntegrationTest {
 
     private static final String API_ROOT
             = "http://localhost:8081/short_url";
 
     private ShortUrlCreationDto createRandomShortUrlCreationDto() {
         ShortUrlCreationDto dto = new ShortUrlCreationDto();
-        dto.setLongUrl(randomAlphabetic(15));
+        dto.setLongUrl("https://www." + randomAlphabetic(15) + ".fr");
         return dto;
     }
 
@@ -61,7 +61,7 @@ public class SpringBootBootstrapLiveTest {
         String shortUrl = creationResponse.jsonPath().get("shortUrl");
 
 
-        Response destinationResponse = RestAssured.get(API_ROOT+"/destination/"+shortUrl);
+        Response destinationResponse = RestAssured.get(API_ROOT + "/destination/" + shortUrl);
 
         assertEquals(HttpStatus.OK.value(), destinationResponse.getStatusCode());
         assertEquals(dto.getLongUrl(), destinationResponse.getBody().print());

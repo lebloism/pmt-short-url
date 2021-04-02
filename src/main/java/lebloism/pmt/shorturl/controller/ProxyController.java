@@ -14,6 +14,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * To redirect to asked url
+ */
 @RestController
 @RequestMapping("/")
 public class ProxyController {
@@ -21,6 +24,13 @@ public class ProxyController {
     @Autowired
     private ShortUrlRepository shortUrlRepository;
 
+    /**
+     * Redirect to the page associated to the short url
+     *
+     * @param shortUrl the short url (string)
+     * @return the page associated to the short url
+     * @throws ShortUrlNotFoundException if not found
+     */
     @GetMapping("/{shortUrl}")
     public RedirectView goTo(@PathVariable String shortUrl) {
         String longUrl = shortUrlRepository.findByShortUrl(shortUrl)

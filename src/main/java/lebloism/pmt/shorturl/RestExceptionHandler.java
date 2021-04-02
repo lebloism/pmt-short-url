@@ -1,6 +1,5 @@
 package lebloism.pmt.shorturl;
 
-import lebloism.pmt.shorturl.exception.ShortUrlIdMismatchException;
 import lebloism.pmt.shorturl.exception.ShortUrlNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,7 +26,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({
-            ShortUrlIdMismatchException.class,
             ConstraintViolationException.class,
             DataIntegrityViolationException.class,
             MalformedURLException.class
