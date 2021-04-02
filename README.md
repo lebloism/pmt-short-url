@@ -37,8 +37,8 @@ A Postman collection with the webservices is provided in code source (PMT_short_
 We could add :
 * webservices security
 * possibility to choose between different short url generation strategies
-** not using confusing characters as O/0, I/l
-** easy-to-memorize (alternation of consonants and vowels)
+    * not using confusing characters as O/0, I/l
+    * easy-to-memorize (alternation of consonants and vowels)
 * metrics
 
 Of course, this short url provider would be useful only if hosted on a very short domain name !!
